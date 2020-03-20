@@ -1,0 +1,94 @@
+<div class="row">
+    <div class="col-sm-8 mr-5">
+        <div class="row">
+            <h1><%= @place[:neighborhood] %></h1>
+            <p class="mt-3"><%= @place[:description] %></p>
+            <h5 class="mt-3"><%= "Distance from Evanston:  " + @place[:distance] %></h5>
+        </div>
+        
+        <hr class="my-5">
+        <h3 class="mt-5 text-center"><%= "The Recommendations" %><h3>
+        
+        
+        <div class="row mt-5"> 
+            <div class="col-sm-4 text-left">
+                <h4><%= "Restaurant:" %><h4>
+                <p><%= @place[:restaurant] %></p>
+
+            </div>
+            <div class="col-sm-4 text-left">
+                <h4><%= "Bar:" %><h4>
+                <p><%= @place[:bar] %></p>
+
+            </div>
+            <div class="col-sm-4 text-left">
+                <h4><%= "Coffee:" %><h4>
+                <p><%= @place[:coffee] %></p>
+
+            </div>
+
+        </div>
+
+        <div class="container mt-5">
+            <h3>Where is it?</h3>
+            <iframe
+                width="700"
+                height="550"
+                frameborder="0" style="border:0"
+                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCtovsQvkIUWlNqtYwXY87gEd4ZSmJEhMw
+                &q=<%= @lat_long %>&zoom=13" allowfullscreen>
+            </iframe>
+        </div>
+
+
+    </div>
+
+    <div class="col-sm-3">
+        <div class="row">
+            <h1><%= "Comments" %></h1>
+        </div>
+
+        <! -- # If visited, show comments of people who visited --> 
+        <! -- # If not visited, show comments of people who haven't visited yet  --> 
+
+        <div class="mt-2">
+            <h5><%= "People who have visited:" %></h5>
+            <% for comm in @comment %>
+                <% if comm[:visited] %>
+                    <li class="mt-0"><strong><%= @users_table.where(id: comm[:user_id]).to_a[0][:name] %></strong></li>
+                    <p><%= comm[:comments] %></p>
+                <% else %> 
+                <% end %>
+               
+            <% end %>
+
+        </div> 
+
+        <div class="mt-2">
+            <h5><%= "People yet to visit:" %></h5>
+            <% for comm in @comment %>
+                <% if comm[:visited] %>
+                    
+                <% else %> 
+                    <li class="mt-0"><strong><%= @users_table.where(id: comm[:user_id]).to_a[0][:name] %></strong></li>
+                    <p><%= comm[:comments] %></p>
+                <% end %>
+               
+            <% end %>
+
+        </div> 
+
+
+        <p class="mt-5 text-right">
+            <% if @current_user %>
+                <a href="/places/<%= @place[:id] %>/comment/new" class="btn btn-primary">Comment</a>
+            <% else %>
+                <a href="/logins/new" class="btn btn-danger">Sign in to comment</a>
+            <% end %>
+        </p>
+
+
+    </div>
+
+
+</div>
